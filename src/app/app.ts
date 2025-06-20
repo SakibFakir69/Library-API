@@ -7,11 +7,11 @@ const app: Application=express();
 
 
 
-// app.use((req:Request, res:Response,next:NextFunction)=>
-// {
-//     console.log("first middleware run", req.method);
-//     next();
-// })
+app.use((req:Request, res:Response,next:NextFunction)=>
+{
+    console.log("first middleware run", req.method);
+    next();
+})
 
 // middleware
 app.use(express.json());
