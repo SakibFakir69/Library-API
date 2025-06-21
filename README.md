@@ -25,7 +25,7 @@
 | Method | Endpoint               | Description            |
 |--------|------------------------|------------------------|
 | POST   | /api/borrow            | Borrow a book          |
-| GET    | /api/borrow/summary    | Borrow summary (agg)   |
+| GET    | /api/borrow             | Borrow summary    |
 
 
 
