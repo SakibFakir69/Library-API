@@ -2,7 +2,11 @@
 
 
 # 📚 Library Management API
-``
+
+* 🪒Tech stack
+ `Express`
+ `TypeScript`
+ `MongoDB`
 
 ## 📌 API Endpoints
 
