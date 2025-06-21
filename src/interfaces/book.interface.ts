@@ -1,9 +1,9 @@
-;
+import { promises } from 'dns'
+import {Document} from 'mongoose'
 
 
 
-
-export interface BookInterface{
+export interface BookInterface extends Document{
 
     title:string,
     author:string,
@@ -12,5 +12,8 @@ export interface BookInterface{
     description:string,
     copies:number,
     available:boolean,
+
+
+    functionLogic(quantity:number):Promise<void>
 
 }

@@ -6,7 +6,7 @@ const app: Application=express();
 
 
 import { bookRouter } from "../controllers/book.controller";
-
+import { borrowRouter } from "../controllers/borrow.controller";
 
 
 // middleware
@@ -15,7 +15,7 @@ app.use(express.json());
 
 // book
 app.use('/api', bookRouter)
-
+app.use('/api', borrowRouter)
 
 
 
