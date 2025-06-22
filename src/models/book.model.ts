@@ -30,7 +30,7 @@ const bookSchema = new Schema<BookInterface>(
     copies: {
       type: Number,
       required: true,
-      min: [0, "Copies must be a positive number"],
+      min: [1, "Copies must be a positive number"],
     },
 
     available: {
@@ -44,8 +44,16 @@ const bookSchema = new Schema<BookInterface>(
   }
 );
 
+// save
+
+bookSchema.post("save", async function (doc, next) {
+  console.log(doc.title);
+  
+  next();
+});
+
 bookSchema.pre("save", function (next) {
-  if (this.copies < 0) {
+  if (this.copies <= 1) {
     next(new Error("Copies cannot be negative"));
   }
   next();
@@ -66,7 +74,6 @@ bookSchema.methods.functionLogic = async function (quantity: number) {
   await this.save(); // 4
 };
 
-export const Book = mongoose.model<BookInterface>(
-  "Book",
-  bookSchema
-);
+export const Book = mongoose.model<BookInterface>("Book", bookSchema);
+
+

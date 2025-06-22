@@ -1,9 +1,7 @@
-import express, { Request, Response } from "express";
-
-import { z } from "zod";
+import type { Request, Response, RequestHandler } from "express";
 
 import { Book } from "../models/book.model";
-export const bookRouter = express.Router();
+import { z } from "zod";
 
 const bookpostValidationZod = z.object({
   title: z.string(),
@@ -18,43 +16,47 @@ const bookpostValidationZod = z.object({
   ]),
   isbn: z.string(),
   description: z.string(),
-  copies: z.number().min(0, "Copies must be a positive number"),
+  copies: z.number().min(1, "Copies must be a positive number"),
   available: z.boolean().default(true),
 });
 
-bookRouter.post("/books", async (req, res) => {
+export const createBook: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const zodValidation = bookpostValidationZod.safeParse(req.body);
+
     if (!zodValidation.success) {
-      return res.status(404).json({
+      res.status(404).json({
         message: "Validation failed",
 
         success: false,
         error: zodValidation.error.errors,
       });
+    } else {
+      // post saved
+
+      const newBook = await new Book(zodValidation.data);
+      await newBook.save();
+
+      res.status(201).json({
+        success: true,
+        message: "Book created successfully",
+        data: newBook,
+      });
     }
-
-    // post saved
-
-    const newBook = await new Book(zodValidation.data);
-    await newBook.save();
-
-    return res.status(201).json({
-      success: true,
-      message: "Book created successfully",
-      data: newBook,
-    });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: "Book creation failed",
     });
   }
-});
+};
 
 // GET
 
-bookRouter.get("/books", async (req: Request, res: Response) => {
+export const allBooks: RequestHandler = async (req: Request, res: Response) => {
   try {
     const filter = req.query.filter as string;
     /// book?filter="data";
@@ -68,141 +70,113 @@ bookRouter.get("/books", async (req: Request, res: Response) => {
       .sort({ [sortBy]: sort })
       .limit(limit);
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: "Books retrieved successfully",
       data: books,
     });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: "Book data fetch to  failed",
     });
   }
-});
+};
 
-// . Get Book by ID
+// // . Get Book by ID
 
-bookRouter.get(
-  "/books/:bookId",
-  async (req: Request<{ bookId: string }>, res: Response) => {
-    try {
-      const bookId = req.params.bookId;
-      const bookFind = await Book.findById({ _id: bookId });
+export const bookbyID: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const bookId = req.params.bookId;
+    const foundBook = await Book.findById({ _id: bookId });
 
-      if (!bookFind) {
-        return res.status(404).json({
-          success: false,
-          message: "Book retrieved failed",
-        });
-      }
-
-      //
-      return res.status(200).json({
-        success: true,
-        message: "Book retrieved successfully",
-        data: bookFind,
-      });
-    } catch (error: any) {
-      return res.status(500).json({
+    if (!foundBook) {
+     res.status(404).json({
         success: false,
         message: "Book retrieved failed",
-        error: error.message,
       });
+      
     }
+
+    //
+    res.status(200).json({
+      success: true,
+      message: "Book retrieved successfully",
+      data: foundBook,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Book retrieved failed",
+      error: error.message,
+    });
   }
-);
+};
 
-// PUT /api/books/:bookId
+// // PUT /api/books/:bookId
 
-bookRouter.put(
-  "/books/:bookId",
-  async (req: Request<{ bookId: string }>, res: Response) => {
-    try {
-      const bookId = req.params.bookId as string;
-      const body = req.body;
-      const updateDoc = await Book.findByIdAndUpdate(  bookId, body,{
-        new:true,
-      } );
-      if (!updateDoc) {
-        return res.status(404).json({
-          success: false,
-          message: "Book updated failed",
-        });
-      }
-      res.status(200).json({
-        success: true,
-        message: "Book updated successfully",
-        data: updateDoc,
-      });
-    } catch (error: any) {
-      return res.status(500).json({
+export const updateBook: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const bookId = req.params.bookId as string;
+    const body = req.body;
+    const updateDoc = await Book.findByIdAndUpdate(bookId, body, {
+      new: true,
+    });
+    if (!updateDoc) {
+      res.status(404).json({
         success: false,
         message: "Book updated failed",
-        error: error.message,
       });
     }
+    res.status(200).json({
+      success: true,
+      message: "Book updated successfully",
+      data: updateDoc,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Book updated failed",
+      error: error.message,
+    });
   }
-);
+};
 
+// // DELETE /api/books/:bookId
 
-
-
-
-
-
-
-
-
-// DELETE /api/books/:bookId
-
-
-
-bookRouter.delete('/books/:bookId', async(req:Request<{bookId:string}>, res:Response)=>{
-
-  try{
-
+export const deleteBook: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  try {
     const bookId = req.params.bookId;
     const bookIdDelete = await Book.findByIdAndDelete(bookId);
     console.log(bookIdDelete);
 
-    if(!bookIdDelete){
-      return res.status(500).json({
-        "success": false,
-  "message": "Book deleted failed",
-        
-      })
+    if (!bookIdDelete) {
+      res.status(500).json({
+        success: false,
+        message: "Book deleted failed",
+      });
+      return;
     }
 
-    return res.status(200).json({
-      "success": true,
-  "message": "Book deleted successfully",
-  data:null
-
-    })
-
-  
-
-
-
-
-
-
-  }catch(error:any){
-    return res.status(500).json({
-      success:false,
-       "message": "Book deleted failed",
-       error: error.message
-
-
-    })
-
-
+    res.status(200).json({
+      success: true,
+      message: "Book deleted successfully",
+      data: null,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Book deleted failed",
+      error: error.message,
+    });
   }
-
-})
-
-
-
-
-
+};

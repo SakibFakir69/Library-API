@@ -1,43 +1,31 @@
-
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
 import app from "./app";
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 const URI = process.env.MONGODB_URI;
 
 let server;
 
+async function main() {
+  if (!URI) {
+    return "Enter Your mongoDB uri";
+  }
 
-async function main(){
+  try {
+    await mongoose
+      .connect(URI)
+      .then(() => console.log("Connected to MongoDB"))
+      .catch((err) => console.error("MongoDB connection error:", err));
 
-    if(!URI)
-    {
-        return "Enter Your mongoDB uri";
-    }
-
-    try{
-        await mongoose.connect(URI)
-
-        server=app.listen(port, ()=>{
-            console.log(`http://localhost:${port}`)
-
-        })
-    console.log("connected to DB")
-    }catch(error:any){
-        console.error(error.message)
-
-    }
-
-
-
-
-
-
+    server = app.listen(port, () => {
+      console.log(`http://localhost:${port}`);
+    });
+    console.log("connected to DB");
+  } catch (error: any) {
+    console.error(error.message);
+  }
 }
 
 main();
-
-
-

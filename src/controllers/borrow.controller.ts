@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, RequestHandler, Response } from "express";
 import { z } from "zod";
 export const borrowRouter = express.Router();
 
@@ -22,26 +22,31 @@ const borrowzodValidation = z.object({
   ),
 });
 
-borrowRouter.post("/borrow", async (req: Request, res: Response) => {
+export const borrowaBook: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const data = borrowzodValidation.safeParse(req.body);
 
     if (!data.success) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: "validation failed",
         error: data.error.format(),
       });
+      return;
     }
 
     const { dueDate, quantity, book } = data.data;
 
     const foundedBook = await Book.findById(book);
     if (!foundedBook) {
-      return res.status(404).json({
+      res.status(400).json({
         success: false,
         message: "book not founded",
       });
+      return;
     }
 
     await foundedBook.functionLogic(quantity);
@@ -49,22 +54,25 @@ borrowRouter.post("/borrow", async (req: Request, res: Response) => {
     const borrowData = await new Borrow(data.data);
     await borrowData.save();
 
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       message: "Book borrowed successfully",
       data: borrowData,
     });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: "Book borrowed failed",
     });
   }
-});
+};
 
 // GET /api/borrow
 
-borrowRouter.get("/borrow", async (req: Request, res: Response) => {
+export const borrowedbookssummary: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const data = await Borrow.aggregate([
       // stage - 1
@@ -97,12 +105,10 @@ borrowRouter.get("/borrow", async (req: Request, res: Response) => {
       data: data,
     });
   } catch (error: any) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: "Borrowed books summary retrieved failed",
       error: error.message,
     });
   }
-});
-
-
+};

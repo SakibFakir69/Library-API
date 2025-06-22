@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const mongoose_1 = __importDefault(require("mongoose"));
-const app_1 = __importDefault(require("./app"));
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 const URI = process.env.MONGODB_URI;
 let server;
 function main() {
@@ -23,10 +24,13 @@ function main() {
             return "Enter Your mongoDB uri";
         }
         try {
-            yield mongoose_1.default.connect(URI);
-            server = app_1.default.listen(port, () => {
-                console.log(`http://localhost:${port}`);
-            });
+            yield mongoose_1.default
+                .connect(URI)
+                .then(() => console.log("Connected to MongoDB"))
+                .catch((err) => console.error("MongoDB connection error:", err));
+            // server = app.listen(port, () => {
+            //   console.log(`http://localhost:${port}`);
+            // });
             console.log("connected to DB");
         }
         catch (error) {

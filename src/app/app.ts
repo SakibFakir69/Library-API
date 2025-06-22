@@ -1,12 +1,13 @@
 
 import dotenv from "dotenv";
 dotenv.config();
+
 import express, { Application ,Request,Response,NextFunction} from 'express';
-const app: Application=express();
+const app:Application=express();
 
 
-import { bookRouter } from "../controllers/book.controller";
-import { borrowRouter } from "../controllers/borrow.controller";
+import bookRouter from "../routes/book.route";
+import borrowRouter from "../routes/borrow.route";
 
 
 // middleware
@@ -14,16 +15,16 @@ app.use(express.json());
 
 
 // book
-app.use('/api', bookRouter)
-app.use('/api', borrowRouter)
+app.use('/api/books', bookRouter)
+app.use('/api/borrow', borrowRouter)
 
 
 
 // books-collection LIbraryDB
 
-app.get('/',async (req,res)=>{
+app.get('/', (req,res)=>{
 
-    res.send('<h1>Library api server running</h1>')
+    res.send('Library api server running')
 
 })
 
