@@ -85,20 +85,16 @@ export const allBooks: RequestHandler = async (req: Request, res: Response) => {
 
 // // . Get Book by ID
 
-export const bookbyID: RequestHandler = async (
-  req: Request,
-  res: Response
-) => {
+export const bookbyID: RequestHandler = async (req: Request, res: Response) => {
   try {
     const bookId = req.params.bookId;
     const foundBook = await Book.findById({ _id: bookId });
 
     if (!foundBook) {
-     res.status(404).json({
+      res.status(404).json({
         success: false,
         message: "Book retrieved failed",
       });
-      
     }
 
     //
