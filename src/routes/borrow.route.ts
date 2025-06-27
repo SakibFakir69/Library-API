@@ -13,7 +13,7 @@ borrowRouter.post('/',borrowaBook);
 
 // GET /api/borrow
 
-borrowRouter.get('/summary',borrowedbookssummary)
+borrowRouter.get('/',borrowedbookssummary)
 
 
 
