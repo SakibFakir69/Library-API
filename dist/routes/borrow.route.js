@@ -9,5 +9,5 @@ const borrow_controller_1 = require("../controllers/borrow.controller");
 // POST /api/borrow
 borrowRouter.post('/', borrow_controller_1.borrowaBook);
 // GET /api/borrow
-borrowRouter.get('/summary', borrow_controller_1.borrowedbookssummary);
+borrowRouter.get('/', borrow_controller_1.borrowedbookssummary);
 exports.default = borrowRouter;
