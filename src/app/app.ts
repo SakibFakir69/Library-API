@@ -15,9 +15,7 @@ app.use(express.json());
 
 // cors 
 
-app.use(cors({
-    origin:['http://localhost:5173/']
-}))
+app.use(cors());
 
 
 // book
