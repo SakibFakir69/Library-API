@@ -15,14 +15,15 @@ app.use(express.json());
 
 // cors 
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // or specify: http://localhost:5173
-  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+const allowedOrigins = ['http://localhost:5173']; // Add more as needed
 
-app.use(cors());
+const corsOptions = {
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Optional, only if you're using cookies
+};
+
 
 
 // book
