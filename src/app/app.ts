@@ -24,7 +24,7 @@ const corsOptions = {
   credentials: true, // Optional, only if you're using cookies
 };
 
-
+app.use(cors(corsOptions));
 
 // book
 app.use('/api/books', bookRouter)
