@@ -59,10 +59,12 @@ export const borrowaBook: RequestHandler = async (
       message: "Book borrowed successfully",
       data: borrowData,
     });
-  } catch (error) {
+  } catch (error:any) {
+ 
     res.status(500).json({
       success: false,
       message: "Book borrowed failed",
+      error: error.message
     });
   }
 };
