@@ -52,12 +52,12 @@ bookSchema.post("save", async function (doc, next) {
   next();
 });
 
-bookSchema.pre("save", function (next) {
-  if (this.copies <= 0) {
-    return next(new Error("Copies cannot be zero or negative"));
-  }
-  next(); 
-});
+// bookSchema.pre("save", function (next) {
+//   if (this.copies <= 0) {
+//     return next(new Error("Copies cannot be zero or negative"));
+//   }
+//   next(); 
+// });
 
 
 // use middleware if copies<0 error
@@ -67,6 +67,7 @@ bookSchema.methods.functionLogic = async function (quantity: number) {
     throw new Error("Not enough copies available");
   }
   this.copies -= quantity; //1
+  console.log(quantity, this.copies,"copies")
 
   if (this.copies <= 0) {
     this.available = false;
