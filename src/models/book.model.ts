@@ -53,11 +53,12 @@ bookSchema.post("save", async function (doc, next) {
 });
 
 bookSchema.pre("save", function (next) {
-  if (this.copies <= 1) {
-    next(new Error("Copies cannot be negative"));
+  if (this.copies <= 0) {
+    return next(new Error("Copies cannot be zero or negative"));
   }
-  next();
+  next(); 
 });
+
 
 // use middleware if copies<0 error
 
