@@ -13,7 +13,7 @@ const borrowSchema = new Schema(
     quantity: {
       type: Number,
       required: true,
-      min: [1, "quantity must be a positive number"],
+      min: [0, "quantity must be a positive number"],
     },
     dueDate: { type: Date, required: true },
   },
