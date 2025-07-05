@@ -15,7 +15,7 @@ app.use(express.json());
 
 // cors 
 
-const allowedOrigins = ['http://localhost:5173']; // Add more as needed
+const allowedOrigins = ['http://localhost:5173','https://magical-kangaroo-1871da.netlify.app/']; // Add more as needed
 
 const corsOptions = {
   origin: allowedOrigins,
