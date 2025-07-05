@@ -63,15 +63,19 @@ bookSchema.post("save", async function (doc, next) {
 // use middleware if copies<0 error
 
 bookSchema.methods.functionLogic = async function (quantity: number) {
+  console.log(quantity);
   if (this.copies < quantity) {
     throw new Error("Not enough copies available");
   }
-  this.copies -= quantity; //1
+  this.copies-= quantity; //1
   console.log(quantity, this.copies,"copies")
 
   if (this.copies <= 0) {
     this.available = false;
+  } else {
+    this.available = true; 
   }
+  console.log(this.available)
 
   await this.save(); // 4
 };

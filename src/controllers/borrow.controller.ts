@@ -1,13 +1,17 @@
+import { Book } from './../models/book.model';
 import express, { Request, RequestHandler, Response } from "express";
 import { z } from "zod";
 export const borrowRouter = express.Router();
 
 import { Borrow } from "../models/borrow.model";
-import { Book } from "../models/book.model";
+
+
 
 // add zod
 
 const borrowzodValidation = z.object({
+
+  // book:z.string().nonempty(),
   
   quantity: z.number().int().positive(),
   dueDate: z.string().refine(
@@ -30,6 +34,7 @@ export const borrowaBook: RequestHandler = async (
     const data = borrowzodValidation.safeParse(req.body);
 
     const { bookId } = req.params;
+    console.log(bookId,"id");
 
     if (!data.success) {
       res.status(400).json({
@@ -50,6 +55,10 @@ export const borrowaBook: RequestHandler = async (
       });
       return;
     }
+
+
+    await foundedBook.functionLogic(quantity);
+
 
     const borrowData = new Borrow({
       ...data.data,

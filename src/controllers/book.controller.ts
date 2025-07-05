@@ -46,10 +46,11 @@ export const createBook: RequestHandler = async (
         data: newBook,
       });
     }
-  } catch (error) {
+  } catch (error:any) {
     res.status(500).json({
       success: false,
       message: "Book creation failed",
+      error:error.message
     });
   }
 };
