@@ -11,11 +11,11 @@ import {
 const bookRouter = express.Router();
 
 // POST /api/books
-bookRouter.post("/", createBook);
+bookRouter.post("/create-book", createBook);
 // GET /api/books
-bookRouter.get("/", allBooks);
+bookRouter.get("/books ", allBooks);
 // /api/books/:bookId
-bookRouter.get("/:bookId", bookbyID);
+bookRouter.get("/edit-book/:bookId", bookbyID);
 
 // /api/books/:bookId
 
