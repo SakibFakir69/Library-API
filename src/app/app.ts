@@ -24,7 +24,9 @@ const corsOptions = {
   credentials: true, // Optional, only if you're using cookies
 };
 
-app.use(cors(corsOptions));
+app.use(cors({
+  origin:['http://localhost:5173','https://magical-kangaroo-1871da.netlify.app']
+}));
 
 // book
 app.use('/api', bookRouter)
