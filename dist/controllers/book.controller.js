@@ -53,6 +53,7 @@ const createBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({
             success: false,
             message: "Book creation failed",
+            error: error.message
         });
     }
 });

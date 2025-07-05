@@ -12,20 +12,19 @@ const book_route_1 = __importDefault(require("../routes/book.route"));
 const borrow_route_1 = __importDefault(require("../routes/borrow.route"));
 // middleware
 app.use(express_1.default.json());
-// cors 
-const allowedOrigins = ['http://localhost:5173']; // Add more as needed
-const corsOptions = {
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true, // Optional, only if you're using cookies
-};
-app.use((0, cors_1.default)(corsOptions));
+// cors
+app.use((0, cors_1.default)({
+    origin: [
+        "http://localhost:5173",
+        "https://magical-kangaroo-1871da.netlify.app",
+        "https://magical-kangaroo-1871da.netlify.app",
+    ],
+}));
 // book
-app.use('/api', book_route_1.default);
-app.use('/api/borrow', borrow_route_1.default);
+app.use("/api", book_route_1.default);
+app.use("/api/borrow", borrow_route_1.default);
 // books-collection LIbraryDB
-app.get('/', (req, res) => {
-    res.send('Library api server running');
+app.get("/", (req, res) => {
+    res.send("Library api server running");
 });
 exports.default = app;

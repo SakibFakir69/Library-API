@@ -13,14 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.borrowedbookssummary = exports.borrowaBook = exports.borrowRouter = void 0;
+const book_model_1 = require("./../models/book.model");
 const express_1 = __importDefault(require("express"));
 const zod_1 = require("zod");
 exports.borrowRouter = express_1.default.Router();
 const borrow_model_1 = require("../models/borrow.model");
-const book_model_1 = require("../models/book.model");
 // add zod
 const borrowzodValidation = zod_1.z.object({
-    // book: z.string(),
+    // book:z.string().nonempty(),
     quantity: zod_1.z.number().int().positive(),
     dueDate: zod_1.z.string().refine((val) => {
         const date = new Date(val);
@@ -33,6 +33,7 @@ const borrowaBook = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const data = borrowzodValidation.safeParse(req.body);
         const { bookId } = req.params;
+        console.log(bookId, "id");
         if (!data.success) {
             res.status(400).json({
                 success: false,
@@ -50,6 +51,7 @@ const borrowaBook = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
             return;
         }
+        yield foundedBook.functionLogic(quantity);
         const borrowData = new borrow_model_1.Borrow(Object.assign(Object.assign({}, data.data), { book: bookId }));
         yield borrowData.save();
         res.status(201).json({

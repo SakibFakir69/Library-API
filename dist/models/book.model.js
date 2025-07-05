@@ -63,6 +63,7 @@ bookSchema.post("save", function (doc, next) {
 // use middleware if copies<0 error
 bookSchema.methods.functionLogic = function (quantity) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(quantity);
         if (this.copies < quantity) {
             throw new Error("Not enough copies available");
         }
@@ -71,6 +72,10 @@ bookSchema.methods.functionLogic = function (quantity) {
         if (this.copies <= 0) {
             this.available = false;
         }
+        else {
+            this.available = true;
+        }
+        console.log(this.available);
         yield this.save(); // 4
     });
 };
