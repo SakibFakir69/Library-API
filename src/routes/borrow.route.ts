@@ -9,11 +9,11 @@ import { borrowaBook, borrowedbookssummary } from '../controllers/borrow.control
 
 // POST /api/borrow
 
-borrowRouter.post('/',borrowaBook);
+borrowRouter.post('/borrow/:bookId',borrowaBook);
 
 // GET /api/borrow
 
-borrowRouter.get('/',borrowedbookssummary)
+borrowRouter.get('/borrow-summary',borrowedbookssummary)
 
 
 
