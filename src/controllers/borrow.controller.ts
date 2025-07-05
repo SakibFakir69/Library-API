@@ -8,7 +8,7 @@ import { Book } from "../models/book.model";
 // add zod
 
 const borrowzodValidation = z.object({
-  book: z.string(),
+    // book: z.string(),
   quantity: z.number().int().positive(),
   dueDate: z.string().refine(
     (val) => {
