@@ -32,6 +32,7 @@ const borrowzodValidation = zod_1.z.object({
 const borrowaBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = borrowzodValidation.safeParse(req.body);
+        const { bookId } = req.params;
         if (!data.success) {
             res.status(400).json({
                 success: false,
@@ -40,12 +41,12 @@ const borrowaBook = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
             return;
         }
-        const { dueDate, quantity, book } = data.data;
-        const foundedBook = yield book_model_1.Book.findById(book);
+        const { dueDate, quantity } = data.data;
+        const foundedBook = yield book_model_1.Book.findById(bookId);
         if (!foundedBook) {
             res.status(400).json({
                 success: false,
-                message: "book not founded",
+                message: "book not found",
             });
             return;
         }
@@ -62,6 +63,7 @@ const borrowaBook = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({
             success: false,
             message: "Book borrowed failed",
+            error: error.message
         });
     }
 });

@@ -37,7 +37,7 @@ const bookSchema = new Schema({
     copies: {
         type: Number,
         required: true,
-        min: [1, "Copies must be a positive number"],
+        min: [0, "Copies must be a positive number"],
     },
     available: {
         type: Boolean,
@@ -54,12 +54,12 @@ bookSchema.post("save", function (doc, next) {
         next();
     });
 });
-bookSchema.pre("save", function (next) {
-    if (this.copies <= 1) {
-        next(new Error("Copies cannot be negative"));
-    }
-    next();
-});
+// bookSchema.pre("save", function (next) {
+//   if (this.copies <= 0) {
+//     return next(new Error("Copies cannot be zero or negative"));
+//   }
+//   next(); 
+// });
 // use middleware if copies<0 error
 bookSchema.methods.functionLogic = function (quantity) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -67,6 +67,7 @@ bookSchema.methods.functionLogic = function (quantity) {
             throw new Error("Not enough copies available");
         }
         this.copies -= quantity; //1
+        console.log(quantity, this.copies, "copies");
         if (this.copies <= 0) {
             this.available = false;
         }

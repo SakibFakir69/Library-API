@@ -9,7 +9,7 @@ import { borrowaBook, borrowedbookssummary } from '../controllers/borrow.control
 
 // POST /api/borrow
 
-borrowRouter.post('/borrow/:bookId',borrowaBook);
+borrowRouter.post('/:bookId',borrowaBook);
 
 // GET /api/borrow
 

@@ -28,7 +28,7 @@ app.use(cors(corsOptions));
 
 // book
 app.use('/api', bookRouter)
-app.use('/api', borrowRouter)
+app.use('/api/borrow', borrowRouter)
 
 
 

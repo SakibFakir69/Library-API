@@ -22,7 +22,7 @@ const corsOptions = {
 };
 app.use((0, cors_1.default)(corsOptions));
 // book
-app.use('/api/books', book_route_1.default);
+app.use('/api', book_route_1.default);
 app.use('/api/borrow', borrow_route_1.default);
 // books-collection LIbraryDB
 app.get('/', (req, res) => {

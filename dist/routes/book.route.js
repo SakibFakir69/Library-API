@@ -8,13 +8,13 @@ const book_controller_1 = require("../controllers/book.controller");
 // router
 const bookRouter = express_1.default.Router();
 // POST /api/books
-bookRouter.post("/", book_controller_1.createBook);
+bookRouter.post("/create-book", book_controller_1.createBook);
 // GET /api/books
-bookRouter.get("/", book_controller_1.allBooks);
+bookRouter.get("/books", book_controller_1.allBooks);
 // /api/books/:bookId
 bookRouter.get("/:bookId", book_controller_1.bookbyID);
 // /api/books/:bookId
-bookRouter.put("/:bookId", book_controller_1.updateBook);
+bookRouter.put("/edit-book/:bookId", book_controller_1.updateBook);
 // /api/books/:bookId
-bookRouter.delete("/:bookId", book_controller_1.deleteBook);
+bookRouter.delete("/books/:bookId", book_controller_1.deleteBook);
 exports.default = bookRouter;
