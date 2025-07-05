@@ -20,7 +20,7 @@ const borrow_model_1 = require("../models/borrow.model");
 const book_model_1 = require("../models/book.model");
 // add zod
 const borrowzodValidation = zod_1.z.object({
-    book: zod_1.z.string(),
+    // book: z.string(),
     quantity: zod_1.z.number().int().positive(),
     dueDate: zod_1.z.string().refine((val) => {
         const date = new Date(val);
@@ -50,8 +50,7 @@ const borrowaBook = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
             return;
         }
-        yield foundedBook.functionLogic(quantity);
-        const borrowData = yield new borrow_model_1.Borrow(data.data);
+        const borrowData = new borrow_model_1.Borrow(Object.assign(Object.assign({}, data.data), { book: bookId }));
         yield borrowData.save();
         res.status(201).json({
             success: true,
@@ -63,7 +62,7 @@ const borrowaBook = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({
             success: false,
             message: "Book borrowed failed",
-            error: error.message
+            error: error.message,
         });
     }
 });

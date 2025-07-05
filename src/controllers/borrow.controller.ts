@@ -8,7 +8,7 @@ import { Book } from "../models/book.model";
 // add zod
 
 const borrowzodValidation = z.object({
-    // book: z.string(),
+  // book: z.string(),
   quantity: z.number().int().positive(),
   dueDate: z.string().refine(
     (val) => {
@@ -29,7 +29,7 @@ export const borrowaBook: RequestHandler = async (
   try {
     const data = borrowzodValidation.safeParse(req.body);
 
-    const {bookId} = req.params;
+    const { bookId } = req.params;
 
     if (!data.success) {
       res.status(400).json({
@@ -51,22 +51,22 @@ export const borrowaBook: RequestHandler = async (
       return;
     }
 
-    await foundedBook.functionLogic(quantity);
+    const borrowData = new Borrow({
+      ...data.data,
+      book: bookId, // ✅ manually set bookId from params
+    });
 
-    const borrowData = await new Borrow(data.data);
     await borrowData.save();
-
     res.status(201).json({
       success: true,
       message: "Book borrowed successfully",
       data: borrowData,
     });
-  } catch (error:any) {
- 
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: "Book borrowed failed",
-      error: error.message
+      error: error.message,
     });
   }
 };
