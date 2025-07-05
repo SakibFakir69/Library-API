@@ -13,7 +13,7 @@ const bookRouter = express.Router();
 // POST /api/books
 bookRouter.post("/create-book", createBook);
 // GET /api/books
-bookRouter.get("/books ", allBooks);
+bookRouter.get("/books", allBooks);
 // /api/books/:bookId
 bookRouter.get("/:bookId", bookbyID);
 
@@ -22,7 +22,7 @@ bookRouter.get("/:bookId", bookbyID);
 bookRouter.put("/edit-book/:bookId", updateBook);
 
 // /api/books/:bookId
-bookRouter.delete("/:bookId", deleteBook);
+bookRouter.delete("/books/:bookId", deleteBook);
 
 
 
