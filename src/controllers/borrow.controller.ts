@@ -29,6 +29,8 @@ export const borrowaBook: RequestHandler = async (
   try {
     const data = borrowzodValidation.safeParse(req.body);
 
+    const {bookId} = req.params;
+
     if (!data.success) {
       res.status(400).json({
         success: false,
@@ -38,13 +40,13 @@ export const borrowaBook: RequestHandler = async (
       return;
     }
 
-    const { dueDate, quantity, book } = data.data;
+    const { dueDate, quantity } = data.data;
 
-    const foundedBook = await Book.findById(book);
+    const foundedBook = await Book.findById(bookId);
     if (!foundedBook) {
       res.status(400).json({
         success: false,
-        message: "book not founded",
+        message: "book not found",
       });
       return;
     }
